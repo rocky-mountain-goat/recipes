@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import Tile from '../components/recipeTile'
 
 function TileRow() {
@@ -14,4 +14,4 @@ function TileRow() {
   );
 }
 
-export default TileRow;
+export default TileRow

@@ -12,6 +12,7 @@ export const typeDefs = gql`
   type Query {
     hello: String,
 		recipes: [Recipe!]!
+		recipe(_id: String): Recipe
   }
 
 	type Recipe {

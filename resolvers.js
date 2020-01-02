@@ -2,8 +2,8 @@ import { Recipe } from './models/recipe'
 
 export const resolvers = {
   Query: {
-    hello: () => 'Hi world!',
-		recipes: () => Recipe.find()
+		recipes: () => Recipe.find(),
+		recipe: (root, { _id} ) => Recipe.findOne({ _id })
   },
 
 	Mutation: {

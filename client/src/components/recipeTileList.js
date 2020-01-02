@@ -15,7 +15,7 @@ const RECIPES_QUERY = gql`
 `
 
 export class TileList extends Component {
-	render() {
+	render(props) {
 		return (
 			<div>
 				<Query query={RECIPES_QUERY}>
@@ -23,7 +23,7 @@ export class TileList extends Component {
 						({ loading, error, data }) => {
 							if(loading) return <h4>Loading...</h4>
 							if(error) console.log(error)
-							return data.recipes.map((recipe) => <Tile key={recipe.id} recipe={recipe} />)
+							return data.recipes.map((recipe) => <Tile { ...props } key={recipe.id} recipe={recipe} />)
 						}
 					}
 				</ Query>

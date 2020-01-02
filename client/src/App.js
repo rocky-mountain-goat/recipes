@@ -5,6 +5,7 @@ import { ApolloProvider } from 'react-apollo'
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import Home from './pages/home'
+import RecipePage from './pages/recipe'
 import './App.css'
 
 const cache = new InMemoryCache();
@@ -23,7 +24,9 @@ function App() {
       <div>
         <BrowserRouter>
           <Switch>
-            <Route path="/" component={Home} />
+            <Route path="/" exact render={(props) => <Home {...props} title="Home Page" />} />
+            <Route path="/recipe/:id" render={(props) => <RecipePage {...props} title="Recipe Page" />} />
+            <Route path="/recipe/:id/edit" render={(props) => <RecipePage {...props} title="Edit Recipe Page" />} />
           </Switch>
         </BrowserRouter>
       </div>

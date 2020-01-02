@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from '../components/navBar'
-import TileList from '../components/recipeTileList'
+import Recipe from '../components/recipe'
 
-function Home(props) {
-	console.log('HOME', props)
-
+function RecipePage(props) {
+	console.log('Recipe Page', props)
   return (
     <div>
       <NavBar />
       <div className="container">
-				<TileList { ...props } />
+				<Recipe { ...props } />
       </div>
     </div>
   );
 }
 
-export default Home;
+export default RecipePage;

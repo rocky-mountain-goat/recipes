@@ -1,35 +1,8 @@
 import React, { useState, useEffect }  from 'react'
-import gql from 'graphql-tag'
+// import gql from 'graphql-tag'
 import { useParams, useHistory } from 'react-router'
 import { useQuery, useMutation } from '@apollo/react-hooks'
-
-const UPDATE_RECIPE_MUTATION = gql`
-	mutation UpdateRecipe($id: String! $name: String!, $instructions: String!, $category: String!) {
-		updateRecipe(id: $id, name: $name, instructions: $instructions, category: $category) {
-			id
-			name
-			instructions
-			category
-		}
-	}
-`
-
-const DELETE_RECIPE_MUTATION = gql`
-	mutation DeleteRecipe($id: String!) {
-		deleteRecipe(id: $id) {
-			id
-		}
-	}
-`
-
-// mutation {
-//   deleteRecipe(id: "5e0d0a4d01f25c43d596f6e3") {
-//     id
-//     name
-//     category
-//     instructions
-//   }
-// }
+import { UPDATE_RECIPE_MUTATION, DELETE_RECIPE_MUTATION, RECIPES_QUERY, RECIPE_QUERY } from '../queries/queries'
 
 function EditRecipe(props) {
 	const history = useHistory()
@@ -37,20 +10,9 @@ function EditRecipe(props) {
 	const [deleteRecipe] = useMutation(DELETE_RECIPE_MUTATION)
 	const [recipe, setRecipe] = useState({name: '', category: '', imageUrl: '', instructions: '', ingredients: []})
 	const { id } = useParams()
-	const RECIPE_QUERY = gql`
-		query RecipeQuery {
-		recipe(_id: "${ id }") {
-			id
-			name
-			category
-			instructions
-			imageUrl
-			ingredients
-		}
-  }
-	`
-
-	const { loading, error, data } = useQuery(RECIPE_QUERY)
+	const { loading, error, data } = useQuery(RECIPE_QUERY, {
+		variables: { id }
+	})
 
 	useEffect(() => {
 		if (data && data.recipe) {
@@ -73,17 +35,25 @@ function EditRecipe(props) {
 		history.push(`/recipe/${ recipe.id }`)
 	}
 
-	async function handleDeleteRecipe() {
+	function handleDeleteRecipe() {
 		try {
-			const result = await deleteRecipe({ variables: { id: recipe.id }})
+			const result = deleteRecipe({ 
+				variables: { id: recipe.id },
+				awaitRefetchQueries: true,
+				refetchQueries: [{ query: RECIPES_QUERY }]
+			})
+			console.log('handleDeleteRecipe', result)
 			if (!result.data.deleteRecipe) {
 				return
 			}
-			window.location.href = '/'
+			history.push('/')
+			// window.location.href = '/'
 		}
 		catch(error) {
-			console.error(error);
-			window.location.href = '/'
+			console.error('DELETE ERROR', error);
+			// history.push('/')
+
+			// window.location.href = '/'
 		}
 
 	}

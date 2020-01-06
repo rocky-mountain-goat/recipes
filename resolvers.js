@@ -13,7 +13,8 @@ export const resolvers = {
 		},
 		deleteRecipe: (_, args) => {
 			return Recipe.findByIdAndRemove({ _id: args.id }, {}, function(result) {
-				return result
+				console.log('deleteRecipe', args.id)
+				return { id: args.id }
 			})
 		},
 		updateRecipe: (_, args) => {

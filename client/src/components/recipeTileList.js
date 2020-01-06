@@ -1,16 +1,8 @@
 import React from 'react'
-import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
 import Tile from './recipeTile'
-
-const RECIPES_QUERY = gql`
-	{
-		recipes {
-			id
-			name
-		}
-	}
-`
+import { Link } from 'react-router-dom'
+import { RECIPES_QUERY } from '../queries/queries'
 
 function TileList(props) {
 	const { loading, error, data } = useQuery(RECIPES_QUERY)
@@ -20,6 +12,9 @@ function TileList(props) {
 
 	return (
 		<div>
+			{data.recipes.length === 0 &&
+				<p>No recipes have been added. Please <Link to="/add">add a recipe</Link> to get started.</p>
+			}
 			{
 				data.recipes.map(recipe => <Tile { ...props } key={recipe.id} recipe={recipe} />)
 			}

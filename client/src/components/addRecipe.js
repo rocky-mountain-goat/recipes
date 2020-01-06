@@ -1,21 +1,10 @@
 import React, { useState }  from 'react'
-import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 import { useHistory } from 'react-router'
-
-const RECIPE_MUTATION = gql`
-	mutation CreateRecipe($name: String!, $instructions: String!, $category: String!) {
-		createRecipe(name: $name, instructions: $instructions, category: $category) {
-			id
-			name
-			instructions
-			category
-		}
-	}
-`
+import { CREATE_RECIPE_MUTATION, RECIPES_QUERY } from '../queries/queries'
 
 function AddRecipe(props) {
-	const [addRecipe] = useMutation(RECIPE_MUTATION)
+	const [addRecipe] = useMutation(CREATE_RECIPE_MUTATION)
 	const history = useHistory()
 	const initialRecipe = {
 		name: '',
@@ -37,11 +26,15 @@ function AddRecipe(props) {
 	}
 
 	async function handleAddRecipe() {
-		const result = await addRecipe({ variables: { ...recipe } })
-		console.log(result.data)
+		const result = await addRecipe({ 
+			variables: { ...recipe },
+			refetchQueries: [{ query: RECIPES_QUERY }]
+		})
+
 		if (!result.data.createRecipe) {
 			return
 		}
+		
 		history.push(`/recipe/${ result.data.createRecipe.id }`)
 	}
 

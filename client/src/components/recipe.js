@@ -1,24 +1,13 @@
 import React from 'react'
 import { useParams } from 'react-router'
-import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
+import { RECIPE_QUERY } from '../queries/queries'
 
 function Recipe(props) {
 	const { id } = useParams()
-	const RECIPE_QUERY = gql`
-		query RecipeQuery {
-			recipe(_id: "${ id }") {
-				id
-				name
-				category
-				instructions
-				imageUrl
-				ingredients
-			}
-		}
-	`
-
-	const { loading, error, data } = useQuery(RECIPE_QUERY)
+	const { loading, error, data } = useQuery(RECIPE_QUERY, {
+		variables: { id }
+	})
 
 	if (loading) return 'Loading...'
   if (error) return `Error! ${error.message}`

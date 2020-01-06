@@ -1,13 +1,11 @@
 import React, { useState, useEffect }  from 'react'
-// import gql from 'graphql-tag'
 import { useParams, useHistory } from 'react-router'
 import { useQuery, useMutation } from '@apollo/react-hooks'
-import { UPDATE_RECIPE_MUTATION, DELETE_RECIPE_MUTATION, RECIPES_QUERY, RECIPE_QUERY } from '../queries/queries'
+import { UPDATE_RECIPE_MUTATION, RECIPE_QUERY } from '../queries/queries'
 
 function EditRecipe(props) {
 	const history = useHistory()
 	const [updateRecipe] = useMutation(UPDATE_RECIPE_MUTATION)
-	const [deleteRecipe] = useMutation(DELETE_RECIPE_MUTATION)
 	const [recipe, setRecipe] = useState({name: '', category: '', imageUrl: '', instructions: '', ingredients: []})
 	const { id } = useParams()
 	const { loading, error, data } = useQuery(RECIPE_QUERY, {
@@ -33,29 +31,6 @@ function EditRecipe(props) {
 			return
 		}
 		history.push(`/recipe/${ recipe.id }`)
-	}
-
-	function handleDeleteRecipe() {
-		try {
-			const result = deleteRecipe({ 
-				variables: { id: recipe.id },
-				awaitRefetchQueries: true,
-				refetchQueries: [{ query: RECIPES_QUERY }]
-			})
-			console.log('handleDeleteRecipe', result)
-			if (!result.data.deleteRecipe) {
-				return
-			}
-			history.push('/')
-			// window.location.href = '/'
-		}
-		catch(error) {
-			console.error('DELETE ERROR', error);
-			// history.push('/')
-
-			// window.location.href = '/'
-		}
-
 	}
 
   return (
@@ -105,12 +80,6 @@ function EditRecipe(props) {
 				onClick={handleUpdateRecipe}
 			>
 				Update Recipe	
-			</button>
-			<button
-				className="button"
-				onClick={handleDeleteRecipe}
-			>
-				Delete Recipe	
 			</button>
     </div>
   )

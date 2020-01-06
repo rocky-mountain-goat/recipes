@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import NavBar from '../components/navBar'
 import Recipe from '../components/recipe'
 
 function RecipePage(props) {
-	console.log('Recipe Page', props)
   return (
     <div>
-      <NavBar />
+      <NavBar type="edit" />
       <div className="container">
 				<Recipe { ...props } />
       </div>
@@ -14,4 +13,4 @@ function RecipePage(props) {
   );
 }
 
-export default RecipePage;
+export default RecipePage

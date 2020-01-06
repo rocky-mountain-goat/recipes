@@ -10,6 +10,16 @@ export const resolvers = {
 		createRecipe: (_, args) => {
 			const recipe = new Recipe(args)
 			return recipe.save()
+		},
+		deleteRecipe: (_, args) => {
+			return Recipe.findByIdAndRemove({ _id: args.id }, {}, function(result) {
+				return result
+			})
+		},
+		updateRecipe: (_, args) => {
+			return Recipe.findByIdAndUpdate(args.id, args, {}, function(result) {
+				return result
+			})
 		}
 	}
 };

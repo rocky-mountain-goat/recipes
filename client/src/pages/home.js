@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import NavBar from '../components/navBar'
 import TileList from '../components/recipeTileList'
 
 function Home(props) {
-	console.log('HOME', props)
-
   return (
     <div>
-      <NavBar />
+      <NavBar type="add" />
       <div className="container">
 				<TileList { ...props } />
       </div>
@@ -15,4 +13,4 @@ function Home(props) {
   );
 }
 
-export default Home;
+export default Home

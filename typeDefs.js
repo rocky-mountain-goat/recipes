@@ -25,7 +25,9 @@ export const typeDefs = gql`
 	}
 
 	type Mutation {
-		createRecipe(name: String!) : Recipe!
+		createRecipe(name: String! category: String!, instructions: String!) : Recipe!,
+		deleteRecipe(id: String!) : Recipe!
+		updateRecipe(id: String!, name: String, category: String, instructions: String) : Recipe!
 	}
 `;
 

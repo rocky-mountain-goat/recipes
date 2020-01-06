@@ -1,35 +1,30 @@
-import React, { Component } from 'react'
+import React from 'react'
 import gql from 'graphql-tag'
-import  { Query } from 'react-apollo'
+import { useQuery } from '@apollo/react-hooks'
 import Tile from './recipeTile'
 
 const RECIPES_QUERY = gql`
-	query RecipesQuery {
+	{
 		recipes {
 			id
 			name
-			category
-			imageUrl
 		}
 	}
 `
 
-export class TileList extends Component {
-	render(props) {
-		return (
-			<div>
-				<Query query={RECIPES_QUERY}>
-					{
-						({ loading, error, data }) => {
-							if(loading) return <h4>Loading...</h4>
-							if(error) console.log(error)
-							return data.recipes.map((recipe) => <Tile { ...props } key={recipe.id} recipe={recipe} />)
-						}
-					}
-				</ Query>
-			</div>
-		)
-	}
+function TileList(props) {
+	const { loading, error, data } = useQuery(RECIPES_QUERY)
+
+	if (loading) return 'Loading...'
+  if (error) return `Error! ${error.message}`
+
+	return (
+		<div>
+			{
+				data.recipes.map(recipe => <Tile { ...props } key={recipe.id} recipe={recipe} />)
+			}
+		</div>
+	)
 }
 
 export default TileList

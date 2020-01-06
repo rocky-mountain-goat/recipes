@@ -9,14 +9,23 @@ const PORT = process.env.PORT || 4000;
 
 const startServer = async () => {
 	const app = express()
-	const server = new ApolloServer({ typeDefs, resolvers })
+	const server = new ApolloServer({ 
+		typeDefs,
+		resolvers,
+		defaultOptions: {
+			watchQuery: {
+				fetchPolicy: 'cache-and-network'
+			}
+		}
+	})
 
 	app.use(cors())
 	server.applyMiddleware({ app })
 
 	await mongoose.connect('mongodb://localhost:27017/recipes', { 
 		useNewUrlParser: true,
-		useUnifiedTopology: true
+		useUnifiedTopology: true,
+		useFindAndModify: false
 	})
 
 	app.listen({ port: PORT }, () =>
